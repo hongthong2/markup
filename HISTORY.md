@@ -1,3 +1,99 @@
+## 6.1.1 (unreleased)
+
+### Bug Fixes
+
+* I restored the CommonMarker 0.x API without requiring a parser upgrade. Existing 0.x installations retain their rendering flags, extension validation, and output behavior.
+* I retained CommonMarker 2.x support with its existing option behavior.
+* I added full-suite CI coverage for CommonMarker 0.23.12 alongside the default 2.8.2 dependency.
+
+The RDoc 8 and reStructuredText fixes listed below remain included.
+
+## 6.1.0 - 2026-10-16 (withdrawn)
+
+I withdrew this release because it required a CommonMarker upgrade for existing 0.x installations. The `v6.1.0` tag remains available for traceability.
+
+### Compatibility Changes
+
+* Require commonmarker 2.x when using the CommonMarker renderer; upgrade existing commonmarker 0.x installations [#2059](https://github.com/github/markup/pull/2059).
+* Accept `VALIDATE_UTF8`, `LIBERAL_HTML_TAG`, `TABLE_PREFER_STYLE_ATTRIBUTES`, and `STRIKETHROUGH_DOUBLE_TILDE` without applying them [#2059](https://github.com/github/markup/pull/2059).
+* Preserve soft line breaks with `NOBREAKS` instead of converting them to spaces [#2059](https://github.com/github/markup/pull/2059).
+* Apply `HARDBREAKS` and `NOBREAKS` in their supplied order; the last flag wins, replacing the old `HARDBREAKS` precedence [#2059](https://github.com/github/markup/pull/2059).
+
+### Bug Fixes
+
+* Support RDoc 8 formatter initialization and declare `rdoc < 9` as a runtime dependency [#2109](https://github.com/github/markup/pull/2109), [#2104](https://github.com/github/markup/pull/2104).
+* Restore reStructuredText section and table-of-contents anchors with docutils 0.18 and later [#2081](https://github.com/github/markup/pull/2081), [#2087](https://github.com/github/markup/pull/2087).
+
+### Development
+
+* Update development dependencies to commonmarker 2.8.2, html-pipeline 3.2, minitest 6, and activesupport 8.1.
+* Require 100% measured line and branch coverage and load gem metadata without loading renderers [#2072](https://github.com/github/markup/pull/2072).
+
+## 7.0.0 - 2026-10-15 (withdrawn)
+
+I withdrew this release on 2026-10-16. The `v7.0.0` tag remains available for traceability.
+
+### Breaking
+
+* Require commonmarker 2.x when using the CommonMarker renderer; upgrade existing commonmarker 0.x installations [#2059](https://github.com/github/markup/pull/2059).
+* Accept `VALIDATE_UTF8`, `LIBERAL_HTML_TAG`, `TABLE_PREFER_STYLE_ATTRIBUTES`, and `STRIKETHROUGH_DOUBLE_TILDE` without applying them [#2059](https://github.com/github/markup/pull/2059).
+* Preserve soft line breaks with `NOBREAKS` instead of converting them to spaces [#2059](https://github.com/github/markup/pull/2059).
+* Apply `HARDBREAKS` and `NOBREAKS` in their supplied order; the last flag wins, replacing the old `HARDBREAKS` precedence [#2059](https://github.com/github/markup/pull/2059).
+
+### Bug Fixes
+
+* Support RDoc 8 formatter initialization and declare `rdoc < 9` as a runtime dependency [#2109](https://github.com/github/markup/pull/2109), [#2104](https://github.com/github/markup/pull/2104).
+* Restore reStructuredText section and table-of-contents anchors with docutils 0.18 and later [#2081](https://github.com/github/markup/pull/2081), [#2087](https://github.com/github/markup/pull/2087).
+
+### Development
+
+* Update development dependencies to commonmarker 2.8.2, html-pipeline 3.2, minitest 6, and activesupport 8.1.
+* Require 100% measured line and branch coverage and load gem metadata without loading renderers [#2072](https://github.com/github/markup/pull/2072).
+
+## 6.0.0 - 2026-05-04
+
+### Breaking
+
+* Drop support for Ruby < 3.3 (Ruby 3.1 EOL March 2025, Ruby 3.2 EOL March 2026)
+
+### Security
+
+* Use HTTPS for cpanminus download in CI to prevent MITM attacks [#2050](https://github.com/github/markup/pull/2050)
+* Bump nokogiri to >= 1.19.1 to fix GHSA-wx95-c6cv-8532
+* Harden CI pip install with `--require-hashes --no-deps` [#2048](https://github.com/github/markup/pull/2048)
+* Use HTTPS for RubyGems source URL in Gemfile [#1854](https://github.com/github/markup/pull/1854)
+* Add explicit `contents: read` permissions to CI workflow [#1855](https://github.com/github/markup/pull/1855)
+* Bump rexml from 3.3.0 to 3.3.9 (multiple security fixes)
+
+### Bug Fixes
+
+* Fix RST section ID rendering to iterate all anchors instead of only the first [040f91d](https://github.com/github/markup/commit/040f91d)
+
+### Documentation
+
+* Fix spelling errors in codebase [#1479](https://github.com/github/markup/pull/1479)
+* Fix broken Textile language link in README [#1703](https://github.com/github/markup/pull/1703)
+
+### Infrastructure
+
+* Remove legacy Dockerfile and .dockerignore (Ubuntu Trusty, non-functional) [#2048](https://github.com/github/markup/pull/2048)
+* Update CI test matrix: drop Ruby 3.2, add Ruby 4.0 (now testing 3.3, 3.4, 4.0)
+* Bump nokogiri to 1.19.2, activesupport to 7.2.3.1
+* Bump github-linguist from 7.30.0 to 9.1.0, then to 9.3.0
+* Pin all GitHub Actions to commit SHAs for supply chain hardening
+* Add Dependabot configuration for automated dependency updates
+* Various Dependabot bumps for CI actions (ruby/setup-ruby, actions/checkout, actions/cache, actions/setup-python, actions/stale)
+
+## 5.0.1 - 2024-06-17
+* Bump activesupport from 4.0 to 7.1.3.4
+
+## 5.0.0 - 2024-06-17
+* Drop support for Ruby versions < 3
+* Bump nokogiri from 1.8.1 to 1.16.5
+* Bump nokogiri-diff from 0.2.0 to 0.3.0
+* Bump rdoc from 3.6 to 6.7.0
+* Update CommandImplementation to better support large files (affecting RST and POD6 rendering)
+
 ## 4.0.2 - 2023-10-10
 * Add support for .mdx files in markdown
 

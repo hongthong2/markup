@@ -4,36 +4,57 @@ on: [push, pull_request]
 env:
   JRUBY_OPTS: -Xcext.enabled=true
 
+permissions:
+  contents: read
+
 jobs:
   build:
-    name: "Test / Ruby ${{ matrix.ruby }}"
+    name: "Test / Ruby ${{ matrix.ruby }} / RDoc ${{ matrix.rdoc }} / CommonMarker ${{ matrix.commonmarker }}"
     runs-on: ubuntu-latest
+    env:
+      RDOC_VERSION: "~> ${{ matrix.rdoc }}"
+      COMMONMARKER_VERSION: "${{ matrix.commonmarker }}"
     strategy:
       matrix:
+        commonmarker:
+          - "~> 2.8.2"
+        rdoc:
+          - "7.2.0"
         ruby:
-          - "2.4"
-          - "2.5"
-          - "2.6"
-          - "2.7"
+          - "3.3"
+          - "3.4"
+          - "4.0"
+        include:
+          - ruby: "4.0"
+            rdoc: "8.0"
+            commonmarker: "~> 2.8.2"
+          - ruby: "3.4"
+            rdoc: "7.2.0"
+            commonmarker: "0.23.12"
       fail-fast: false
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 10
+          persist-credentials: false
 
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@651ff0d62c5c79bed6d53ec518387aae20e72c1a # v1.329.0
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true
+          bundler-cache: ${{ matrix.rdoc == '7.2.0' && matrix.commonmarker == '~> 2.8.2' }}
 
-      - uses: actions/setup-python@v2
+      - name: Resolve overridden parser dependencies
+        if: matrix.rdoc != '7.2.0' || matrix.commonmarker != '~> 2.8.2'
+        run: bundle update commonmarker rdoc
+
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          # This should match lib/github/markups.rb GitHub::Markups::MARKUP_RST
-          python-version: '3.x'
+          # Required by lib/github/commands/rest2html (RST rendering)
+          python-version: "3.x"
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip
@@ -46,11 +67,13 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install perl rakudo-pkg
 
-          curl -L http://cpanmin.us | perl - --sudo App::cpanminus
+          curl -fsSL https://cpanmin.us | perl - --sudo App::cpanminus
           sudo cpanm --installdeps --notest Pod::Simple
 
       - name: Install Python dependencies
-        run: python -m pip install docutils
+        run: |
+          echo 'docutils==0.22.4 --hash=sha256:d0013f540772d1420576855455d050a2180186c91c15779301ac2ccb3eeb68de' > /tmp/requirements.txt
+          python -m pip install --require-hashes --no-deps -r /tmp/requirements.txt
 
       - name: Run rake
         run: |

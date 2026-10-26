@@ -160,6 +160,7 @@ SETTINGS = {
     'syntax_highlight': 'none',
     'math_output': 'latex',
     'field_name_limit': 50,
+    'auto_id_prefix': 'id',
 }
 
 default_highlight_language = None
@@ -199,8 +200,8 @@ class GitHubHTMLTranslator(HTMLTranslator):
     # see also: http://bit.ly/NHtyRx
     # the a is to support ::contents with ::sectnums: http://git.io/N1yC
     def visit_section(self, node):
-        id_attribute = node.attributes['ids'][0]
-        self.body.append('<a name="%s"></a>\n' % id_attribute)
+        for id_attribute in node.attributes['ids']:
+            self.body.append('<a name="%s"></a>\n' % id_attribute)
         self.section_level += 1
 
     def depart_section(self, node):

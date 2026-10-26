@@ -20,8 +20,8 @@ The following markups are supported.  The dependencies listed are required if
 you wish to run the library. You can also run `script/bootstrap` to fetch them all.
 
 * [.markdown, .mdown, .mkdn, .md](http://daringfireball.net/projects/markdown/) -- `gem install commonmarker` (https://github.com/gjtorikian/commonmarker)
-* [.textile](https://www.promptworks.com/textile) -- `gem install RedCloth` (https://github.com/jgarber/redcloth)
-* [.rdoc](https://ruby.github.io/rdoc/) -- `gem install rdoc -v 3.6.1`
+* [.textile](https://textile-lang.com/) -- `gem install RedCloth` (https://github.com/jgarber/redcloth)
+* [.rdoc](https://ruby.github.io/rdoc/) -- `gem install rdoc`
 * [.org](http://orgmode.org/) -- `gem install org-ruby` (https://github.com/wallyqs/org-ruby)
 * [.creole](http://wikicreole.org/) -- `gem install creole` (https://github.com/larsch/creole)
 * [.mediawiki, .wiki](http://www.mediawiki.org/wiki/Help:Formatting) -- `gem install wikicloth` (https://github.com/nricciar/wikicloth)
@@ -48,6 +48,8 @@ from this directory.
 Usage
 -----
 
+Markdown rendering supports CommonMarker 0.x and 2.x. Keep the installed version to retain that parser's option behavior. Extensions follow the installed parser; 2.x-only extensions remain unavailable with 0.x.
+
 Basic form:
 
 ```ruby
@@ -72,6 +74,17 @@ require 'github/markup'
 GitHub::Markup.render_s(GitHub::Markups::MARKUP_MARKDOWN, "* One\n* Two")
 ```
 
+Local Development
+-----------------
+
+```sh
+python3 -m venv .venv
+source .venv/bin/activate
+cd script
+./bootstrap
+```
+
+Set `COMMONMARKER_VERSION` to override the development bundle's default `~> 2.8.2` requirement. See [Testing](CONTRIBUTING.md#testing) for parser version commands.
 
 Contributing
 ------------
